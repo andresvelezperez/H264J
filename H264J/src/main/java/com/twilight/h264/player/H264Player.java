@@ -248,9 +248,8 @@ public class H264Player implements Runnable {
                                 buffer = new int[bufferSize];
                             }
                             FrameUtils.YUV2RGB_WOEdge(picture, buffer);
-                            displayPanel.lastFrame = displayPanel.createImage(new MemoryImageSource(imageWidth, imageHeight, buffer, 0, imageWidth));
-                            displayPanel.invalidate();
-                            displayPanel.updateUI();
+                            displayPanel.setImage(displayPanel.createImage(new MemoryImageSource(imageWidth, imageHeight, buffer, 0, imageWidth)));
+                           
 //                            try {
 //                        Thread.sleep(20);
 //                    } catch (InterruptedException ex) {
