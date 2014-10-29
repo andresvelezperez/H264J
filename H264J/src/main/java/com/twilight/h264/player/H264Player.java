@@ -1,6 +1,7 @@
 package com.twilight.h264.player;
 
 import static com.twilight.h264.decoder.H264Context.NAL_AUD;
+import static com.twilight.h264.decoder.H264Context.NAL_IDR_SLICE;
 import static com.twilight.h264.decoder.H264Context.NAL_SLICE;
 
 import java.awt.BorderLayout;
@@ -74,7 +75,7 @@ public class H264Player implements Runnable {
         frame.setVisible(true);
         frame.setSize(new Dimension(640, 480));
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+        frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
 
         new Thread(this).start();
     }
@@ -89,17 +90,21 @@ public class H264Player implements Runnable {
         int nal = code & 0x1F;
 
         if (nal == NAL_AUD) {
+            foundFrameStart = false;
             return true;
         }
 
-        if (nal == NAL_SLICE) {
+        boolean foundFrame = foundFrameStart;
+        if (nal == NAL_SLICE || nal == NAL_IDR_SLICE) {
             if (foundFrameStart) {
                 return true;
             }
             foundFrameStart = true;
+        } else {
+            foundFrameStart = false;
         }
 
-        return false;
+        return foundFrame;
     }
 
     public boolean playFile(InputStream fin) {
@@ -155,7 +160,7 @@ public class H264Player implements Runnable {
             int fileOffset = 0;
             foundFrameStart = false;
 
-		    // avpkt must contain exactly 1 NAL Unit in order for decoder to decode correctly.
+            // avpkt must contain exactly 1 NAL Unit in order for decoder to decode correctly.
             // thus we must read until we get next NAL header before sending it to decoder.
             // Find 1st NAL
             int[] cacheRead = new int[5];
@@ -249,7 +254,7 @@ public class H264Player implements Runnable {
                             }
                             FrameUtils.YUV2RGB_WOEdge(picture, buffer);
                             displayPanel.setImage(displayPanel.createImage(new MemoryImageSource(imageWidth, imageHeight, buffer, 0, imageWidth)));
-                           
+
 //                            try {
 //                        Thread.sleep(20);
 //                    } catch (InterruptedException ex) {
