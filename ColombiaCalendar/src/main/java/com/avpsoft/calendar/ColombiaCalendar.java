@@ -16,10 +16,8 @@
  */
 package com.avpsoft.calendar;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -29,9 +27,8 @@ import java.util.TimeZone;
  */
 public class ColombiaCalendar extends GregorianCalendar{
     
-    private List<Calendar> holidays = new ArrayList<Calendar>();
-    private static TimeZone colombiaTimezone = TimeZone.getTimeZone("GMT-5:00");
-    private static Locale colombiaLocale = new Locale("es","co");
+    private static final TimeZone colombiaTimezone = TimeZone.getTimeZone("GMT-5:00");
+    private static final Locale colombiaLocale = new Locale("es","co");
     private volatile Holiday holiday;
     
     public ColombiaCalendar(){
@@ -40,15 +37,14 @@ public class ColombiaCalendar extends GregorianCalendar{
     
     public boolean isHoliday(){
         
-        List<Holiday> holidaysByYear = ColombiaHolidayCalculator.getInstance().getHolidaysByYear(this.get(Calendar.YEAR));
-        this.holiday = ColombiaHolidayCalculator.searchHoliday(this, holidaysByYear);
+        this.holiday = ColombiaHolidayCalculator.searchHoliday(this);
         
-        if(holiday != null){
-            return true;
-        }
-        
-        return false;
-    } 
+        return holiday != null;
+    }
+    
+    public boolean isSunday(){
+        return get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY;
+    }
     
     public String getHolidayName(){
         
@@ -56,7 +52,7 @@ public class ColombiaCalendar extends GregorianCalendar{
             return this.holiday.getHolidayName();
         }
         
-        return null;
+        return getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, colombiaLocale);
     }
     
 }

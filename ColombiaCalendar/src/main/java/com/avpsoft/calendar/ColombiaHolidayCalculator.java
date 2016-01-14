@@ -16,10 +16,11 @@
  */
 package com.avpsoft.calendar;
 
-import static com.avpsoft.calendar.Util.createDefaultCalendar;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -28,6 +29,7 @@ import java.util.List;
 public final class ColombiaHolidayCalculator {
 
     private static ColombiaHolidayCalculator colombiaHoliday = new ColombiaHolidayCalculator();
+    private static Map<Integer,List<Holiday>> holidayMap = new HashMap<Integer,List<Holiday>>();
 
     protected ColombiaHolidayCalculator() {
         
@@ -67,6 +69,21 @@ public final class ColombiaHolidayCalculator {
         holidays.add(new ColombiaHoliday("Navidad",year, Calendar.DECEMBER, 25,false));
 
         return holidays;
+    }
+    
+    public static Holiday searchHoliday(Calendar calendar){
+        
+        List<Holiday> holidaysByYear = null;
+        int year = calendar.get(Calendar.YEAR);
+        
+        if(!holidayMap.containsKey(year)){
+            holidaysByYear = getInstance().getHolidaysByYear(year);
+            holidayMap.put(year, holidaysByYear);
+        }else{
+            holidaysByYear = holidayMap.get(year);
+        }
+        
+        return searchHoliday(calendar, holidaysByYear);
     }
 
     public static Holiday searchHoliday(Calendar calendar,List<Holiday> holidays){
