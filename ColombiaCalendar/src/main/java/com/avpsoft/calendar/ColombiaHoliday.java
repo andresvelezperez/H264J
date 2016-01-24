@@ -20,6 +20,12 @@ import static com.avpsoft.calendar.Util.createDefaultCalendar;
 import java.util.Calendar;
 
 /**
+ * Ley Emiliani (Ley 51 de 1983), Diario Oficial Nº 36428 del 30 de diciembre de 1983.
+ * Disponible para consulta en: ftp://ftp.camara.gov.co/camara/basedoc/ley/1983/ley_0051_1983.html
+ * Aplica a patir del año 1984.
+*/
+
+/**
  *
  * @author andres
  */
@@ -27,6 +33,7 @@ public class ColombiaHoliday implements Holiday {
     
     private Calendar day;
     private String holidayName;
+    private boolean leyEmiliani;
     
     protected ColombiaHoliday(){
         //
@@ -35,10 +42,11 @@ public class ColombiaHoliday implements Holiday {
     public ColombiaHoliday(final String name,int year,int month, int day,boolean emilini){
         
         this.holidayName = name;
+        this.leyEmiliani = year > 1983 ? emilini : false;
         
-        if(!emilini){
+        if(!leyEmiliani){
             this.day = createDefaultCalendar(year, month, day);
-        }else if(emilini){
+        }else if(leyEmiliani){
             this.day = this.leyEmiliani(year, month, day);
         }
     }
@@ -46,10 +54,11 @@ public class ColombiaHoliday implements Holiday {
     public ColombiaHoliday(final String name,Calendar easterday, int addEaster,boolean emilini){
         
         this.holidayName = name;
+        this.leyEmiliani = easterday.get(Calendar.YEAR) > 1983 ? emilini : false;
         
-        if(!emilini){
+        if(!leyEmiliani){
             day = easterAdd(easterday, addEaster);
-        }else if(emilini){
+        }else if(leyEmiliani){
             day = easterWithLeyEmiliani(easterday, addEaster);
         }
         
