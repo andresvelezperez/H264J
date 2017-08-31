@@ -49,24 +49,24 @@ public final class ColombiaHolidayCalculator {
         
         final Calendar easterDay = Computus.AnonymousGregorianAlgorithm(year);
 
-        holidays.add(new ColombiaHoliday("Dia de Año Nuevo", year, Calendar.JANUARY, 1, false) );
-        holidays.add(new ColombiaHoliday("Dia de los Reyes Magos", year, Calendar.JANUARY, 6,true));
+        holidays.add(new ColombiaHoliday("Día de Año Nuevo", year, Calendar.JANUARY, 1, false) );
+        holidays.add(new ColombiaHoliday("Día de los Reyes Magos", year, Calendar.JANUARY, 6,true));
         holidays.add(new ColombiaHoliday("San Jose",year, Calendar.MARCH, 19,true));
         holidays.add(new ColombiaHoliday("Jueves Santo",easterDay, -3,false));
         holidays.add(new ColombiaHoliday("Viernes Santo",easterDay, -2, false));
-        holidays.add(new ColombiaHoliday("Dia del trabajo",year, Calendar.MAY, 1,false));
-        holidays.add(new ColombiaHoliday("Ascension de Jesus",easterDay,39,true));
+        holidays.add(new ColombiaHoliday("Día del trabajo",year, Calendar.MAY, 1,false));
+        holidays.add(new ColombiaHoliday("Ascensión de Jesús",easterDay,39,true));
         holidays.add(new ColombiaHoliday("Corpus Christi",easterDay,60,true));
-        holidays.add(new ColombiaHoliday("Sagrado Corazon de Jesus",easterDay,68,true));
+        holidays.add(new ColombiaHoliday("Sagrado Corazón de Jesús",easterDay,68,true));
         holidays.add(new ColombiaHoliday("San Pedro y San Pablo",year, Calendar.JUNE, 29,true));
         holidays.add(new ColombiaHoliday("Grito de Independencia",year, Calendar.JULY, 20,false));
-        holidays.add(new ColombiaHoliday("Bataya de Boyaca",year, Calendar.AUGUST, 7,false));
-        holidays.add(new ColombiaHoliday("Asuncion de la Virgen",year, Calendar.AUGUST, 15,true));
-        holidays.add(new ColombiaHoliday("Dia de la Raza",year, Calendar.OCTOBER, 12,true));
+        holidays.add(new ColombiaHoliday("Batalla de Boyacá",year, Calendar.AUGUST, 7,false));
+        holidays.add(new ColombiaHoliday("Asunción de la Virgen",year, Calendar.AUGUST, 15,true));
+        holidays.add(new ColombiaHoliday("Día de la Raza",year, Calendar.OCTOBER, 12,true));
         holidays.add(new ColombiaHoliday("Todos los Santos",year, Calendar.NOVEMBER, 1,true));
         holidays.add(new ColombiaHoliday("Independencia de Cartagena",year, Calendar.NOVEMBER, 11,true));
-        holidays.add(new ColombiaHoliday("Inmaculada Concepcion",year, Calendar.DECEMBER, 8,false));
-        holidays.add(new ColombiaHoliday("Navidad",year, Calendar.DECEMBER, 25,false));
+        holidays.add(new ColombiaHoliday("Inmaculada Concepción",year, Calendar.DECEMBER, 8,false));
+        holidays.add(new ColombiaHoliday("Navidad (pascua)",year, Calendar.DECEMBER, 25,false));
 
         return holidays;
     }
