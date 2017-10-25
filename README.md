@@ -5,7 +5,7 @@ Es una copia del proyecto [H264J](https://code.google.com/p/h264j/) que esta en 
 El proyecto es un "port" de la libreria ffmpeg (libavcodec) para Java. Con una fecha aproximada del Junio 25 de 2012.
 >
 **Cambios**
- - Se agrega Header de Licensia, y se formatea el codigo
+ - Se agrega Header de Licencia, y se formatea el codigo
  - El demo es para abrir un archivo, se modifica para recivir un inputStream
  - Se convierte a proyecto maven.
 
