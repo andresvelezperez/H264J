@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2017
+ *
+ * This program is free software:
+ *
+ * License Artistic License/GPL <http://dev.perl.org/licenses/>
+ */
 package com.twilight.h264.player;
 
 import static com.twilight.h264.decoder.H264Context.NAL_AUD;
@@ -138,7 +145,8 @@ public class H264Player implements Runnable {
         picture = AVFrame.avcodec_alloc_frame();
 
         if ((codec.capabilities & H264Decoder.CODEC_CAP_TRUNCATED) != 0) {
-            c.flags |= MpegEncContext.CODEC_FLAG_TRUNCATED; /* we do not send complete frames */
+            c.flags |= MpegEncContext.CODEC_FLAG_TRUNCATED;
+            /* we do not send complete frames */
 
         }
 
@@ -146,7 +154,7 @@ public class H264Player implements Runnable {
          MUST be initialized there because this information is not
          available in the bitstream. */
 
-        /* open it */
+ /* open it */
         if (c.avcodec_open(codec) < 0) {
             System.out.println("could not open codec\n");
             System.exit(1);

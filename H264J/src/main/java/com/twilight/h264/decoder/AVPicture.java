@@ -1,10 +1,17 @@
+/**
+ * Copyright (C) 2017
+ *
+ * This program is free software:
+ *
+ * License Artistic License/GPL <http://dev.perl.org/licenses/>
+ */
 package com.twilight.h264.decoder;
 
 public class AVPicture {
-	/**
-	 * four components are given, that's all.
-	 * the last component is alpha
-	 */
+
+    /**
+     * four components are given, that's all. the last component is alpha
+     */
     //uint8_t *data[4];
     //int linesize[4];       ///< number of bytes per line
     public int[][] data_base = new int[4][];

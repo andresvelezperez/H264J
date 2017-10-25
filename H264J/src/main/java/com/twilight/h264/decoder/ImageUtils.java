@@ -1,18 +1,25 @@
+/**
+ * Copyright (C) 2017
+ *
+ * This program is free software:
+ *
+ * License Artistic License/GPL <http://dev.perl.org/licenses/>
+ */
 package com.twilight.h264.decoder;
 
 import com.twilight.h264.util.*;
 
 public class ImageUtils {
-	
-	public static final int PIX_FMT_BE        =1; ///< Pixel format is big-endian.
-	public static final int PIX_FMT_PAL       =2; ///< Pixel format has a palette in data[1], values are indexes in this palette.
-	public static final int PIX_FMT_BITSTREAM =4; ///< All values of a component are bit-wise packed end to end.
-	public static final int PIX_FMT_HWACCEL   =8; ///< Pixel format is an HW accelerated format.
 
-	// For JAVA .H264 Decoder, we support only Software Accelerated Format (PIX_FMT_YUV420P) 
-	public static AVPixFmtDescriptor[] av_pix_fmt_descriptors 
-		= new AVPixFmtDescriptor[] { null, new PixFmtYUV420P() }; 
-	
+    public static final int PIX_FMT_BE = 1; ///< Pixel format is big-endian.
+    public static final int PIX_FMT_PAL = 2; ///< Pixel format has a palette in data[1], values are indexes in this palette.
+    public static final int PIX_FMT_BITSTREAM = 4; ///< All values of a component are bit-wise packed end to end.
+    public static final int PIX_FMT_HWACCEL = 8; ///< Pixel format is an HW accelerated format.
+
+    // For JAVA .H264 Decoder, we support only Software Accelerated Format (PIX_FMT_YUV420P) 
+    public static AVPixFmtDescriptor[] av_pix_fmt_descriptors
+            = new AVPixFmtDescriptor[]{null, new PixFmtYUV420P()};
+
 //[PIX_FMT_NB] = {
 //		    [PIX_FMT_YUV420P] = {
 //		        .name = "yuv420p",
@@ -699,98 +706,99 @@ public class ImageUtils {
 //		        },
 //		    },
 //		};
-	
+    public static void av_image_copy(/* uint8_t * */int[][] dst_base,
+            int[] dst_offset,
+            int[] dst_linesizes,
+            /* const uint8_t * */ int[][] src_base,
+            int[] src_offset,
+            int[] src_linesizes,
+            /* enum PixelFormat */ int pix_fmt, int width, int height) {
+        AVPixFmtDescriptor desc = av_pix_fmt_descriptors[pix_fmt];
 
-	public static void av_image_copy(/* uint8_t * */int[][] dst_base,
-			int[] dst_offset, 
-			int[] dst_linesizes,
-			/* const uint8_t * */int[][] src_base, 
-			int[] src_offset,
-			int[] src_linesizes,
-			/* enum PixelFormat */int pix_fmt, int width, int height) {
-		AVPixFmtDescriptor desc = av_pix_fmt_descriptors[pix_fmt];
+        // No H/W Accel
+        // if (desc.flags & PIX_FMT_HWACCEL)
+        // return;
+        if ((desc.flags & PIX_FMT_PAL) != 0) {
+            av_image_copy_plane(dst_base[0], dst_offset[0], dst_linesizes[0], src_base[0], src_offset[0],
+                    src_linesizes[0], width, height);
+            /* copy the palette */
+            System.arraycopy(src_base[1], src_offset[1], dst_base[1], dst_offset[1], 4 * 256);
+            // memcpy(dst_data[1], src_data[1], 4*256);
+        } else {
+            int i, planes_nb = 0;
 
-		// No H/W Accel
-		// if (desc.flags & PIX_FMT_HWACCEL)
-		// return;
+            for (i = 0; i < desc.nb_components; i++) {
+                planes_nb = Math.max(planes_nb, desc.comp[i].plane + 1);
+            }
 
-		if ((desc.flags & PIX_FMT_PAL) != 0) {
-			av_image_copy_plane(dst_base[0], dst_offset[0], dst_linesizes[0], src_base[0], src_offset[0],
-					src_linesizes[0], width, height);
-			/* copy the palette */
-			System.arraycopy(src_base[1], src_offset[1], dst_base[1], dst_offset[1], 4 * 256);
-			// memcpy(dst_data[1], src_data[1], 4*256);
-		} else {
-			int i, planes_nb = 0;
+            for (i = 0; i < planes_nb; i++) {
+                int h = height;
+                int bwidth = av_image_get_linesize(pix_fmt, width, i);
+                if (i == 1 || i == 2) {
+                    h = -((-height) >> desc.log2_chroma_h);
+                }
+                av_image_copy_plane(dst_base[i], dst_offset[i], dst_linesizes[i], src_base[i], src_offset[i],
+                        src_linesizes[i], bwidth, h);
+            }
+        }
+    }
 
-			for (i = 0; i < desc.nb_components; i++)
-				planes_nb = Math.max(planes_nb, desc.comp[i].plane + 1);
+    public static void av_image_copy_plane(/* uint8_t * */int[] dst,
+            int _dst_offset,
+            int dst_linesize,
+            /* const uint8_t * */ int[] src,
+            int _src_offset,
+            int src_linesize, int bytewidth,
+            int height) {
+        int dst_offset = _dst_offset;
+        int src_offset = _src_offset;
+        if (dst == null || src == null) {
+            return;
+        }
+        for (; height > 0; height--) {
+            //memcpy(dst, src, bytewidth);
+            System.arraycopy(src, src_offset, dst, dst_offset, bytewidth);
+            dst_offset += dst_linesize;
+            src_offset += src_linesize;
+        }
+    }
 
-			for (i = 0; i < planes_nb; i++) {
-				int h = height;
-				int bwidth = av_image_get_linesize(pix_fmt, width, i);
-				if (i == 1 || i == 2) {
-					h = -((-height) >> desc.log2_chroma_h);
-				}
-				av_image_copy_plane(dst_base[i], dst_offset[i], dst_linesizes[i], src_base[i], src_offset[i],
-						src_linesizes[i], bwidth, h);
-			}
-		}
-	}
+    public static int av_image_get_linesize(/*enum PixelFormat*/int pix_fmt, int width, int plane) {
+        AVPixFmtDescriptor desc = av_pix_fmt_descriptors[pix_fmt];
+        int max_step[] = new int[4];
+        /* max pixel step for each plane */
+        int max_step_comp[] = new int[4];
+        /* the component for each plane which has the max pixel step */
+        int s;
 
-	public static void av_image_copy_plane(/* uint8_t * */int[] dst,
-			int _dst_offset,
-			int dst_linesize,
-			/* const uint8_t * */int[] src, 
-			int _src_offset,
-			int src_linesize, int bytewidth,
-			int height) {
-		int dst_offset = _dst_offset;
-		int src_offset = _src_offset;
-		if (dst == null || src == null)
+        if ((desc.flags & PIX_FMT_BITSTREAM) != 0) {
+            return (width * (desc.comp[0].step_minus1 + 1) + 7) >> 3;
+        }
 
-			return;
-		for (; height > 0; height--) {
-			//memcpy(dst, src, bytewidth);
-			System.arraycopy(src, src_offset, dst, dst_offset, bytewidth);
-			dst_offset += dst_linesize;
-			src_offset += src_linesize;
-		}
-	}
+        av_image_fill_max_pixsteps(max_step, max_step_comp, desc);
+        s = (max_step_comp[plane] == 1 || max_step_comp[plane] == 2) ? desc.log2_chroma_w : 0;
+        return max_step[plane] * (((width + (1 << s) - 1)) >> s);
+    }
 
-	public static int av_image_get_linesize(/*enum PixelFormat*/int pix_fmt, int width, int plane)
-	{
-	    AVPixFmtDescriptor desc = av_pix_fmt_descriptors[pix_fmt];
-	    int max_step[] = new int[4];       /* max pixel step for each plane */
-	    int max_step_comp[] = new int[4];       /* the component for each plane which has the max pixel step */
-	    int s;
+    public static void av_image_fill_max_pixsteps(int[] max_pixsteps,
+            int[] max_pixstep_comps, AVPixFmtDescriptor pixdesc) {
+        int i;
+        // memset(max_pixsteps, 0, 4*sizeof(max_pixsteps[0]));
+        Arrays.fill(max_pixsteps, 0, 4, 0);
+        if (max_pixstep_comps != null) // memset(max_pixstep_comps, 0, 4*sizeof(max_pixstep_comps[0]));
+        {
+            Arrays.fill(max_pixstep_comps, 0, 4, 0);
+        }
 
-	    if ((desc.flags & PIX_FMT_BITSTREAM)!=0)
-	        return (width * (desc.comp[0].step_minus1+1) + 7) >> 3;
+        for (i = 0; i < 4; i++) {
+            AVComponentDescriptor comp = (pixdesc.comp[i]);
+            if ((comp.step_minus1 + 1) > max_pixsteps[comp.plane]) {
+                max_pixsteps[comp.plane] = comp.step_minus1 + 1;
+                if (max_pixstep_comps != null) {
+                    max_pixstep_comps[comp.plane] = i;
+                }
+            }
+        }
+    }
 
-	    av_image_fill_max_pixsteps(max_step, max_step_comp, desc);
-	    s = (max_step_comp[plane] == 1 || max_step_comp[plane] == 2) ? desc.log2_chroma_w : 0;
-	    return max_step[plane] * (((width + (1 << s) - 1)) >> s);
-	}
-	
-	public static void av_image_fill_max_pixsteps(int[] max_pixsteps,
-			int[] max_pixstep_comps, AVPixFmtDescriptor pixdesc) {
-		int i;
-		// memset(max_pixsteps, 0, 4*sizeof(max_pixsteps[0]));
-		Arrays.fill(max_pixsteps, 0, 4, 0);
-		if (max_pixstep_comps != null)
-			// memset(max_pixstep_comps, 0, 4*sizeof(max_pixstep_comps[0]));
-			Arrays.fill(max_pixstep_comps, 0, 4, 0);
-
-		for (i = 0; i < 4; i++) {
-			AVComponentDescriptor comp = (pixdesc.comp[i]);
-			if ((comp.step_minus1 + 1) > max_pixsteps[comp.plane]) {
-				max_pixsteps[comp.plane] = comp.step_minus1 + 1;
-				if (max_pixstep_comps != null)
-					max_pixstep_comps[comp.plane] = i;
-			}
-		}
-	}
-	
-	
 }

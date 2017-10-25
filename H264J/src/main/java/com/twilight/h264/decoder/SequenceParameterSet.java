@@ -1,31 +1,38 @@
+/**
+ * Copyright (C) 2017
+ *
+ * This program is free software:
+ *
+ * License Artistic License/GPL <http://dev.perl.org/licenses/>
+ */
 package com.twilight.h264.decoder;
 
 public class SequenceParameterSet {
-	
-    public static final int AVCOL_PRI_BT709      =1; ///< also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B
-    public static final int AVCOL_PRI_UNSPECIFIED=2;
-    public static final int AVCOL_PRI_BT470M     =4;
-    public static final int AVCOL_PRI_BT470BG    =5; ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM
-    public static final int AVCOL_PRI_SMPTE170M  =6; ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC
-    public static final int AVCOL_PRI_SMPTE240M  =7; ///< functionally identical to above
-    public static final int AVCOL_PRI_FILM       =8;
-    public static final int AVCOL_PRI_NB         =9;   ///< Not part of ABI
-	
-    public static final int AVCOL_TRC_BT709      =1; ///< also ITU-R BT1361
-    public static final int AVCOL_TRC_UNSPECIFIED=2;
-    public static final int AVCOL_TRC_GAMMA22    =4; ///< also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM
-    public static final int AVCOL_TRC_GAMMA28    =5; ///< also ITU-R BT470BG
-    public static final int AVCOL_TRC_NB         =6; ///< Not part of ABI
-    
-    public static final int AVCOL_SPC_RGB        =0;
-    public static final int AVCOL_SPC_BT709      =1; ///< also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
-    public static final int AVCOL_SPC_UNSPECIFIED=2;
-    public static final int AVCOL_SPC_FCC        =4;
-    public static final int AVCOL_SPC_BT470BG    =5; ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601
-    public static final int AVCOL_SPC_SMPTE170M  =6; ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC / functionally identical to above
-    public static final int AVCOL_SPC_SMPTE240M  =7;
-    public static final int AVCOL_SPC_NB         =8; ///< Not part of ABI
-        
+
+    public static final int AVCOL_PRI_BT709 = 1; ///< also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B
+    public static final int AVCOL_PRI_UNSPECIFIED = 2;
+    public static final int AVCOL_PRI_BT470M = 4;
+    public static final int AVCOL_PRI_BT470BG = 5; ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM
+    public static final int AVCOL_PRI_SMPTE170M = 6; ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC
+    public static final int AVCOL_PRI_SMPTE240M = 7; ///< functionally identical to above
+    public static final int AVCOL_PRI_FILM = 8;
+    public static final int AVCOL_PRI_NB = 9;   ///< Not part of ABI
+
+    public static final int AVCOL_TRC_BT709 = 1; ///< also ITU-R BT1361
+    public static final int AVCOL_TRC_UNSPECIFIED = 2;
+    public static final int AVCOL_TRC_GAMMA22 = 4; ///< also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM
+    public static final int AVCOL_TRC_GAMMA28 = 5; ///< also ITU-R BT470BG
+    public static final int AVCOL_TRC_NB = 6; ///< Not part of ABI
+
+    public static final int AVCOL_SPC_RGB = 0;
+    public static final int AVCOL_SPC_BT709 = 1; ///< also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
+    public static final int AVCOL_SPC_UNSPECIFIED = 2;
+    public static final int AVCOL_SPC_FCC = 4;
+    public static final int AVCOL_SPC_BT470BG = 5; ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601
+    public static final int AVCOL_SPC_SMPTE170M = 6; ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC / functionally identical to above
+    public static final int AVCOL_SPC_SMPTE240M = 7;
+    public static final int AVCOL_SPC_NB = 8; ///< Not part of ABI
+
     public int profile_idc;
     public int level_idc;
     public int chroma_format_idc;
@@ -50,7 +57,7 @@ public class SequenceParameterSet {
     public long crop_top;             ///< frame_cropping_rect_top_offset
     public long crop_bottom;          ///< frame_cropping_rect_bottom_offset
     public int vui_parameters_present_flag;
-    public AVRational sar = new AVRational(0,0);
+    public AVRational sar = new AVRational(0, 0);
     public int video_signal_type_present_flag;
     public int full_range;
     public int colour_description_present_flag;
@@ -78,7 +85,7 @@ public class SequenceParameterSet {
     public int bit_depth_luma;                ///< bit_depth_luma_minus8 + 8
     public int bit_depth_chroma;              ///< bit_depth_chroma_minus8 + 8
     public int residual_color_transform_flag; ///< residual_colour_transform_flag
-    
+
     public void copyTo(SequenceParameterSet sps) {
         if (this == sps) {
             // Do not copy to myself
@@ -127,11 +134,13 @@ public class SequenceParameterSet {
         sps.num_reorder_frames = num_reorder_frames;
         sps.scaling_matrix_present = scaling_matrix_present;
         sps.scaling_matrix4 = new int[6][16];
-        for(int i=0;i<6;i++)
+        for (int i = 0; i < 6; i++) {
             System.arraycopy(scaling_matrix4[i], 0, sps.scaling_matrix4[i], 0, 16);
+        }
         sps.scaling_matrix8 = new int[2][64];
-        for(int i=0;i<2;i++)
+        for (int i = 0; i < 2; i++) {
             System.arraycopy(scaling_matrix8[i], 0, sps.scaling_matrix8[i], 0, 64);
+        }
         sps.nal_hrd_parameters_present_flag = nal_hrd_parameters_present_flag;
         sps.vcl_hrd_parameters_present_flag = vcl_hrd_parameters_present_flag;
         sps.pic_struct_present_flag = pic_struct_present_flag;

@@ -1,37 +1,45 @@
+/**
+ * Copyright (C) 2017
+ *
+ * This program is free software:
+ *
+ * License Artistic License/GPL <http://dev.perl.org/licenses/>
+ */
 package com.twilight.h264.util;
 
 public class Frame {
-	private int width;
-	private int height;
-	private int[] y;
-	private int[] cb;
-	private int[] cr;
 
-	public Frame(int width, int height, int[] y, int[] cb, int[] cr) {
-		this.width = width;
-		this.height = height;
-		this.y = y;
-		this.cb = cb;
-		this.cr = cr;
-	}
+    private int width;
+    private int height;
+    private int[] y;
+    private int[] cb;
+    private int[] cr;
 
-	public int getWidth() {
-		return width;
-	}
+    public Frame(int width, int height, int[] y, int[] cb, int[] cr) {
+        this.width = width;
+        this.height = height;
+        this.y = y;
+        this.cb = cb;
+        this.cr = cr;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public int[] getY() {
-		return y;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-	public int[] getCb() {
-		return cb;
-	}
+    public int[] getY() {
+        return y;
+    }
 
-	public int[] getCr() {
-		return cr;
-	}
+    public int[] getCb() {
+        return cb;
+    }
+
+    public int[] getCr() {
+        return cr;
+    }
 }

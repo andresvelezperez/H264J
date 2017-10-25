@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2017
+ *
+ * This program is free software:
+ *
+ * License Artistic License/GPL <http://dev.perl.org/licenses/>
+ */
 package com.twilight.h264.decoder;
 
 public class PictureParameterSet {
@@ -21,7 +28,7 @@ public class PictureParameterSet {
     public int[][] scaling_matrix8 = new int[2][64];
     public int[][] chroma_qp_table = new int[2][64];  ///< pre-scaled (with chroma_qp_index_offset) version of qp_table
     public int chroma_qp_diff;
-    
+
     public void copyTo(PictureParameterSet pps) {
         if (this == pps) {
             // Do not copy to myself
@@ -47,15 +54,18 @@ public class PictureParameterSet {
         pps.redundant_pic_cnt_present = redundant_pic_cnt_present; ///< redundant_pic_cnt_present_flag
         pps.transform_8x8_mode = transform_8x8_mode;     ///< transform_8x8_mode_flag
         pps.scaling_matrix4 = new int[6][16];
-        for(int i=0;i<6;i++)
-        	System.arraycopy(scaling_matrix4[i], 0, pps.scaling_matrix4[i], 0, 16);
+        for (int i = 0; i < 6; i++) {
+            System.arraycopy(scaling_matrix4[i], 0, pps.scaling_matrix4[i], 0, 16);
+        }
         pps.scaling_matrix8 = new int[2][64];
         pps.chroma_qp_table = new int[2][64];  ///< pre-scaled (with chroma_qp_index_offset) version of qp_table
-        for(int i=0;i<2;i++)
-        	System.arraycopy(scaling_matrix8[i], 0, pps.scaling_matrix8[i], 0, 64);
-        for(int i=0;i<2;i++)
-        	System.arraycopy(chroma_qp_table[i], 0, pps.chroma_qp_table[i], 0, 64);
+        for (int i = 0; i < 2; i++) {
+            System.arraycopy(scaling_matrix8[i], 0, pps.scaling_matrix8[i], 0, 64);
+        }
+        for (int i = 0; i < 2; i++) {
+            System.arraycopy(chroma_qp_table[i], 0, pps.chroma_qp_table[i], 0, 64);
+        }
         pps.chroma_qp_diff = chroma_qp_diff;
     }
-		
+
 }
